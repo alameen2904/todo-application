@@ -1,6 +1,10 @@
 package com.application.todo;
 
+import com.application.todo.models.Todo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -12,7 +16,7 @@ public class TodoController {
     // Get all
     @GetMapping("/get")
     public String getTodo() {
-        todoService.printTodos();
+
         return "Todo";
     }
 
@@ -30,8 +34,9 @@ public class TodoController {
 
     // Post mapping
     @PostMapping("/create")
-    public String createUser(@RequestBody String body) {
-        return body;
+    ResponseEntity<Todo> createUser(@RequestBody Todo todo){
+   return new ResponseEntity<>(todoService.createTodo(todo), HttpStatus.CREATED);
+
     }
 
     // Put mapping

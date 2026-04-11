@@ -1,5 +1,6 @@
 package com.application.todo;
 
+import com.application.todo.models.Todo;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -9,11 +10,8 @@ public class TodoService {
     // 1. Declare the dependency
     @Autowired
     private TodoRepository todoRepository;
-
-
-
-    // 3. Logic to print the data
-    public void printTodos() {
-        System.out.println(todoRepository.getAllTodos());
+    public Todo createTodo(Todo todo){
+        return todoRepository.save(todo);
     }
+
 }
