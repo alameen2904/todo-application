@@ -2,10 +2,13 @@ package com.application.todo;
 
 import com.application.todo.models.Todo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/todo") // Added a base path for better organization
@@ -13,41 +16,41 @@ public class TodoController {
     @Autowired
     private TodoService todoService;
 
-    // Get all
-    @GetMapping("/get")
-    public String getTodo() {
 
-        return "Todo";
-    }
 
     // Path Variable
     @GetMapping("/{id}")
-    public String getTodoById(@PathVariable long id) {
-        return "Todo with Id " + id;
+    ResponseEntity<Todo> getTodoById(@PathVariable long id) {
+        try {
+            Todo createdTodo = todoService.getTodoById(id);
+
+            return new ResponseEntity<>(createdTodo, HttpStatus.CREATED);
+        }catch(RuntimeException exception){
+            return new ResponseEntity<>((HttpHeaders) null, HttpStatus.NOT_FOUND);
+        }
+    }
+    @GetMapping
+    ResponseEntity<List<Todo>> getTodos() {
+        return new ResponseEntity<List<Todo>>(todoService.getTodos(), HttpStatus.OK);
     }
 
-    // Request Param
-    @GetMapping("/search")
-    public String getTodoByIdParam(@RequestParam("todoId") long id) {
-        return "Todo with Id " + id;
-    }
+
 
     // Post mapping
     @PostMapping("/create")
     ResponseEntity<Todo> createUser(@RequestBody Todo todo){
-   return new ResponseEntity<>(todoService.createTodo(todo), HttpStatus.CREATED);
+        Todo createdTodo = todoService.createTodo(todo);
+            return new ResponseEntity<>(createdTodo, HttpStatus.CREATED);
 
     }
 
-    // Put mapping
-    @PutMapping("/{id}")
-    public String updateTodoById(@PathVariable long id) {
-        return "Update Todo with Id " + id;
+    @PutMapping
+    ResponseEntity<Todo> updateTodoById(@RequestBody Todo todo) {
+        return new ResponseEntity<>(todoService.updateTodo(todo), HttpStatus.OK);
     }
 
-    // Delete mapping
     @DeleteMapping("/{id}")
-    public String deleteTodoById(@PathVariable long id) {
-        return "Delete Todo with Id " + id;
+    void deleteTodoById(@PathVariable long id) {
+        todoService.deleteTodoById(id);
     }
 }
