@@ -1,14 +1,18 @@
 package com.application.todo;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/todo") // Added a base path for better organization
+@RequestMapping("/api/v1/todo") // Added a base path for better organization
 public class TodoController {
+    @Autowired
+    private TodoService todoService;
 
     // Get all
     @GetMapping("/get")
     public String getTodo() {
+        todoService.printTodos();
         return "Todo";
     }
 
