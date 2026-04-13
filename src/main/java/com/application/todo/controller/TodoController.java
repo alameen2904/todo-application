@@ -1,4 +1,4 @@
-package com.application.todo;
+package com.application.todo.controller;
 
 import com.application.todo.models.Todo;
 import com.application.todo.service.TodoService;

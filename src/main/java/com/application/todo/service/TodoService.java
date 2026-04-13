@@ -1,6 +1,6 @@
-package com.application.todo;
+package com.application.todo.service;
 
-import com.application.todo.Repository.TodoRepository;
+import com.application.todo.repository.TodoRepository;
 import com.application.todo.models.Todo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

@@ -1,4 +1,4 @@
-package com.application.todo;
+package com.application.todo.repository;
 
 
 import com.application.todo.models.Todo;
