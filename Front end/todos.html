@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Your Todos</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <h2>My Todos</h2>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+
+    <div id="todo-list" class="todo-cards">
+        <p>Loading...</p>
+    </div>
+
+    <div class="add-todo">
+        <input type="text" id="new-todo" placeholder="Add new todo">
+        <button onclick="addTodo()">Add</button>
+    </div>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
