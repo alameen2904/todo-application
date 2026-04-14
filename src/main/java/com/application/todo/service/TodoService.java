@@ -1,47 +1,56 @@
 package com.application.todo.service;
 
-import com.application.todo.repository.TodoRepository;
 import com.application.todo.models.Todo;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
+import com.application.todo.models.User;
+import com.application.todo.repository.TodoRepository;
+import com.application.todo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service // Tells Spring to manage this class
+@Service
 public class TodoService {
 
-    // 1. Declare the dependency
     @Autowired
     private TodoRepository todoRepository;
-    public Todo createTodo(Todo todo){
+
+    @Autowired
+    private UserRepository userRepository;
+
+
+    public List<Todo> getTodosByUser(String email) {
+        return todoRepository.findByUserEmail(email);
+    }
+
+
+    public Todo createTodo(Todo todo, String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        todo.setUser(user);
         return todoRepository.save(todo);
     }
 
-    public Todo getTodoById(Long id){
-        return todoRepository.findById(id).orElseThrow(()->new RuntimeException("Todo Not Found"));
-    }
-    // Fixed "page" to "Page"
-    public Page<Todo> getAllTodosPages(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return todoRepository.findAll(pageable);
-    }
 
-
-    public List<Todo> getTodos() {
-        return todoRepository.findAll();
+    public Todo getTodoById(long id) {
+        return todoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Todo not found"));
     }
     public Todo updateTodo(Todo todo) {
-        return todoRepository.save(todo);
-    }
-    public void deleteTodoById(Long id) {
-        todoRepository.delete(getTodoById(id));
-    }
 
-    public void deleteAllTodos() {
-        todoRepository.deleteAll(); // This is a built-in JPA method!
-    }
 
+        Todo existing = todoRepository.findById(todo.getId())
+                .orElseThrow(() -> new RuntimeException("Todo not found"));
+
+
+        existing.setTitle(todo.getTitle());
+        existing.setIsCompleted(todo.getIsCompleted());
+
+
+        return todoRepository.save(existing);
+    }
+    public void deleteTodoById(long id) {
+        todoRepository.deleteById(id);
+    }
 }
